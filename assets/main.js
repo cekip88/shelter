@@ -142,8 +142,8 @@ let animals = [
         "diseases": ["none"],
         "parasites": ["none"]
     }];
-function createAnimalCard(data = {}) {
-    let card = location.href.indexOf('pages/main') >= 0 ? document.createElement('DIV') : document.createElement('LI');
+function createAnimalCard(data = {},tag = 'DIV') {
+    let card = document.createElement(`${tag}`);
     card.className = 'slider-item';
     let imgCont = document.createElement('DIV');
     imgCont.className = 'slider-item-photo';
@@ -159,21 +159,87 @@ function createAnimalCard(data = {}) {
     imgCont.append(img);
     card.append(imgCont,name,btn);
 
+    let animalName = name.textContent;
+    card.addEventListener('click',function () {
+        showPopup(animalName);
+    });
+
     return card;
 }
 
 function lookListFill() {
     let list = document.querySelector('.look-list');
-    animals.forEach(function (el) {
-        let item = createAnimalCard(el);
-        list.append(item);
-    })
+    for (let i = 0; i < 6; i++){
+        animals.forEach(function (el) {
+            let item = createAnimalCard(el,'LI');
+            list.append(item);
+        })
+    }
 }
-location.href.indexOf('pages/pets') ? lookListFill() : '';
+function sliderFill() {
+    let slider = document.querySelector('.slider-cont');
+    for (let i = 0; i < 3; i++){
+        let slide = createAnimalCard(animals[i]);
+        slider.append(slide)
+    }
+}
+location.href.indexOf('pages/pets') >= 0 ? lookListFill() : sliderFill();
 
 function slider() {
 
 }
 function showPopup(name) {
+    let popup = document.querySelector('.popup');
+
+    let animal = {};
+    animals.forEach(function (el) {
+        if (el.name === name) animal = el;
+    });
+
+    popup.querySelector('.popup-photo').setAttribute('src',animal.img);
+    popup.querySelector('.popup-inner-name').textContent = name;
+    popup.querySelector('.popup-inner-animal').textContent = animal.type + ' - ' + animal.breed;
+    popup.querySelector('.popup-inner-description').textContent = animal.description;
+
+    let specs = [animal.age,animal.inoculations,animal.diseases,animal.parasites];
+    popup.querySelectorAll('.popup-inner-spec-value').forEach(function (el,index) {
+        el.textContent = '';
+        if (typeof specs[index] === 'string') el.textContent = specs[index];
+        else if(Array.isArray(specs[index])) {
+            specs[index].forEach(function (element) {
+                el.textContent += element + ', '
+            });
+            el.textContent = el.textContent.substr(0,el.textContent.length - 2)
+        }
+    });
+
+
+    let closeBtn = popup.querySelector('.popup-close'),
+        closeBgc = popup.querySelector('.popup-bgc');
+    closeBtn.addEventListener('click',function (e) {
+        popup.classList.remove('popup-active')
+    });
+    closeBgc.addEventListener('click',function (e) {
+        popup.classList.remove('popup-active')
+    });
+    closeBgc.addEventListener('mouseover',function (e) {
+        closeBtn.style.transform = 'rotate(180deg)'
+    });
+    closeBgc.addEventListener('mouseout',function (e) {
+        closeBtn.style.transform = 'rotate(0)'
+    });
+    closeBtn.addEventListener('mouseover',function (e) {
+        closeBtn.style.transform = 'rotate(180deg)'
+    });
+    closeBtn.addEventListener('mouseout',function (e) {
+        closeBtn.style.transform = 'rotate(0)'
+    });
+
+    popup.classList.add('popup-active')
+}
+
+
+
+function pagination() {
 
 }
