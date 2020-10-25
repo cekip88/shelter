@@ -339,9 +339,3 @@ function showPopup(name) {
     popup.classList.add('popup-active')
 }
 
-function random() {
-    let number = Math.random() * 6;
-    number = Math.floor(number);
-    return number;
-}
-createArray();
