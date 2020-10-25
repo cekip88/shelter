@@ -167,15 +167,114 @@ function createAnimalCard(data = {},tag = 'DIV') {
     return card;
 }
 
-function lookListFill() {
-    let list = document.querySelector('.look-list');
+function lookListControll() {
+    let animalsList = [];
     for (let i = 0; i < 6; i++){
-        animals.forEach(function (el) {
-            let item = createAnimalCard(el,'LI');
+        animalsList = animalsList.concat(animals);
+    }
+
+    let itemsOnPage = 3;
+    if (window.innerWidth >= 768 && window.innerWidth < 1280) itemsOnPage = 6;
+    else if (window.innerWidth >= 1280) itemsOnPage = 8;
+
+    let page = 1,
+        start = (page - 1) * itemsOnPage,
+        pages = animalsList.length / itemsOnPage,
+        pagination = document.querySelector('.look-pagination'),
+        pag = {
+            'nextPageBtn' : pagination.children[3],
+            'finishPageBtn' : pagination.children[4],
+            'prevPageBtn' : pagination.children[1],
+            'startPageBtn' : pagination.children[0]
+        };
+
+    window.addEventListener('resize',function (e) {
+        let items = 3;
+        if (window.innerWidth >= 768 && window.innerWidth < 1280) items = 6;
+        else if (window.innerWidth >= 1280) items = 8;
+
+        if (items !== itemsOnPage) {
+            itemsOnPage = items;
+            pages = animalsList.length / itemsOnPage;
+            onclick();
+        }
+    });
+
+    pag['nextPageBtn'].addEventListener('click',function (e) {
+        if (!pag['nextPageBtn'].classList.contains('btn-circle-inactive')){
+            page = page + 1;
+            start = (page - 1) * itemsOnPage;
+            pagination.children[2].querySelector('span').textContent = page + '';
+            onclick()
+        }
+    });
+    pag['prevPageBtn'].addEventListener('click',function (e) {
+        if (!pag['prevPageBtn'].classList.contains('btn-circle-inactive')){
+            page = page - 1;
+            start = (page - 1) * itemsOnPage;
+            pagination.children[2].querySelector('span').textContent = page + '';
+            onclick()
+        }
+    });
+    pag['startPageBtn'].addEventListener('click',function (e) {
+        if (!pag['startPageBtn'].classList.contains('btn-circle-inactive')){
+            page = 1;
+            start = (page - 1) * itemsOnPage;
+            pagination.children[2].querySelector('span').textContent = page + '';
+            onclick()
+        }
+    });
+    pag['finishPageBtn'].addEventListener('click',function (e) {
+        if (!pag['finishPageBtn'].classList.contains('btn-circle-inactive')){
+            page = pages;
+            start = (page - 1) * itemsOnPage;
+            pagination.children[2].querySelector('span').textContent = page + '';
+            onclick()
+        }
+    });
+
+    function onclick() {
+        lookListFill(start,itemsOnPage,page,pages,animalsList);
+        lookPageBtnCheck(page,pages,pag);
+    }
+    onclick();
+}
+function lookListFill(start,itemsOnPage,page,pages,animals) {
+    if (page > pages) return;
+    let list = document.querySelector('.look-list');
+
+    for (let j = 0; j < list.children.length; j++){
+        list.children[j].setAttribute('style','opacity:0')
+    }
+    setTimeout(function (e) {
+        list.innerHTML = '';
+        for (let i = 0; i < itemsOnPage ; i++){
+            let item = createAnimalCard(animals[start], 'LI');
+            start++;
+            item.setAttribute('style','opacity:0');
             list.append(item);
-        })
+            item.removeAttribute('style')
+        }
+    },350)
+}
+function lookPageBtnCheck(page,pages,pag){
+
+    for (let btn in pag){
+        if (pag[btn].classList.contains('btn-circle-inactive')){
+            pag[btn].classList.remove('btn-circle-inactive');
+        }
+    }
+
+    if (page === 1){
+        pag['prevPageBtn'].classList.add('btn-circle-inactive');
+        pag['startPageBtn'].classList.add('btn-circle-inactive');
+    } else if (page === pages){
+        pag['nextPageBtn'].classList.add('btn-circle-inactive');
+        pag['finishPageBtn'].classList.add('btn-circle-inactive');
     }
 }
+
+
 function sliderFill() {
     let slider = document.querySelector('.slider-cont');
     for (let i = 0; i < 3; i++){
@@ -183,7 +282,9 @@ function sliderFill() {
         slider.append(slide)
     }
 }
-location.href.indexOf('pages/pets') >= 0 ? lookListFill() : sliderFill();
+
+
+location.href.indexOf('pages/pets') >= 0 ? lookListControll() : sliderFill();
 
 function slider() {
 
@@ -238,8 +339,9 @@ function showPopup(name) {
     popup.classList.add('popup-active')
 }
 
-
-
-function pagination() {
-
+function random() {
+    let number = Math.random() * 6;
+    number = Math.floor(number);
+    return number;
 }
+createArray();

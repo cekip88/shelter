@@ -547,9 +547,8 @@ main{
     margin-bottom: 24px;
 }
 .popup-inner-specifications li{
-    display: flex;
-    align-items: center;
     margin-top: 6px;
+    text-align: left;
 }
 .popup-inner-specifications li:first-child{
     margin-top: 0;
@@ -558,14 +557,19 @@ main{
     width: 4px;
     height: 4px;
     border-radius: 100%;
-    display: block;
+    display: inline-block;
     content: '';
     background-color: #F1CDB3;
     margin-right: 10px;
+    margin-bottom: 3px;
 }
 .popup-inner-spec-name{
     font-weight: 700;
     margin-right: 7px;
+    display: inline;
+}
+.popup-inner-spec-value{
+    display: inline;
 }
 .popup-close{
     width: 52px;
