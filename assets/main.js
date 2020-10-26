@@ -295,17 +295,39 @@ function lookPageBtnCheck(page,pages,pag){
 
 function sliderFill() {
     let slider = document.querySelector('.slider-cont');
-    for (let i = 0; i < 3; i++){
-        let slide = createAnimalCard(animals[i]);
+    for (let i = 0; i < 5; i++){
+        let j = i - 1;
+        if (j < 0) j = 7;
+        let slide = createAnimalCard(animals[j]);
         slider.append(slide)
     }
 }
 
 
-location.href.indexOf('pages/pets') >= 0 ? lookListControll() : sliderFill();
+location.href.indexOf('pages/pets') >= 0 ? lookListControll() : slider();
 
 function slider() {
+    sliderFill();
 
+    let nextBtn = document.querySelector('.slider-arrow-right');
+    let prevBtn = document.querySelector('.slider-arrow-left');
+    let slider = document.querySelector('.slider-cont');
+    let next = 4;
+    let prev = 6;
+    nextBtn.addEventListener('click',function (e) {
+        let nextCard = createAnimalCard(animals[next]);
+        next = next + 1;
+        if (next > 7) next = 0;
+        slider.children[0].remove();
+        slider.append(nextCard);
+    });
+    prevBtn.addEventListener('click',function (e) {
+        let prevCard = createAnimalCard(animals[prev]);
+        prev = prev - 1;
+        if (prev < 0) prev = 7;
+        slider.children[4].remove();
+        slider.prepend(prevCard);
+    })
 }
 function showPopup(name) {
     let popup = document.querySelector('.popup');
