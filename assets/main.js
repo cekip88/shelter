@@ -166,11 +166,29 @@ function createAnimalCard(data = {},tag = 'DIV') {
 
     return card;
 }
-
+function createArray() {
+    let arr = [];
+    let mob = [], tab = [], desc = [];
+    for (let i = 0; i < 48; i++){
+        if (mob.length === 3) mob = [];
+        if (tab.length === 6) tab = [];
+        if (desc.length === 8) desc = [];
+        let j = Math.floor((Math.random()*8));
+        while (mob.indexOf(j) > -1 || tab.indexOf(j) > -1 || desc.indexOf(j) > -1){
+            j = Math.floor((Math.random()*8));
+        }
+        mob.push(j);
+        tab.push(j);
+        desc.push(j);
+        arr.push(j);
+    }
+    return arr;
+}
 function lookListControll() {
+    let arr = createArray();
     let animalsList = [];
-    for (let i = 0; i < 6; i++){
-        animalsList = animalsList.concat(animals);
+    for (let i = 0; i < arr.length; i++){
+        animalsList.push(animals[arr[i]])
     }
 
     let itemsOnPage = 3;
