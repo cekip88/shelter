@@ -327,7 +327,7 @@ function slider() {
         if (prev < 0) prev = 7;
         slider.children[4].remove();
         slider.prepend(prevCard);
-    })
+    });
 }
 function showPopup(name) {
     let popup = document.querySelector('.popup');
