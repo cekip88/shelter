@@ -228,7 +228,7 @@ html{
     margin-top: 3px;
     transition: .35s ease;
 }
-.head-link-active:after,.head-link:hover:after{
+.head-link-active:after,.head-link:first-child:hover:after,.head-link:nth-child(2):hover:after{
     background-color: #F1CDB3;
 }
 
@@ -823,7 +823,7 @@ main{
     .section{
         width: 1200px;
     }
-    .head-link:hover{
+    .head-link:first-child:hover,.head-link:nth-child(2):hover{
         color: #fff;
     }
 
