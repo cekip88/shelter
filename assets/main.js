@@ -48,6 +48,8 @@ function checkUrl() {
     let links = document.querySelectorAll('.head-link');
     links.forEach(function (el) {
         let href = el.getAttribute('href');
+        href = href.split('/');
+        href = href[href.length - 1];
         if(url.indexOf(href) >= 0){
             el.setAttribute('href','#body');
         }
