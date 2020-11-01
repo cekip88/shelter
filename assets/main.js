@@ -32,12 +32,14 @@ function burgerClick() {
                 main.append(banners[0]);
                 document.querySelector('footer').append(banners[1]);
                 document.querySelector('header').append(banners[2]);
+                document.querySelector('html').setAttribute('style','overflow:hidden')
             }
         } else if (cont.classList.contains('head-burger-active')){
             cont.classList.remove('head-burger-active');
             body.querySelectorAll('.burger-banner').forEach(function (el) {
                 el.remove()
             });
+            document.querySelector('html').setAttribute('style','')
         }
     });
 }
@@ -295,12 +297,12 @@ function lookPageBtnCheck(page,pages,pag){
 }
 
 
-function sliderFill() {
+function sliderFill(arr) {
     let slider = document.querySelector('.slider-cont');
     for (let i = 0; i < 5; i++){
         let j = i - 1;
         if (j < 0) j = 7;
-        let slide = createAnimalCard(animals[j]);
+        let slide = createAnimalCard(arr[j]);
         slider.append(slide)
     }
 }
@@ -309,26 +311,50 @@ function sliderFill() {
 location.href.indexOf('pages/pets') >= 0 ? lookListControll() : slider();
 
 function slider() {
-    sliderFill();
+    let arr = createArray();
+    let array = [];
+    for (let i = 0; i < arr.length; i++){
+        let x = arr[i];
+        array.push(animals[x])
+    }
+
+    sliderFill(array);
 
     let nextBtn = document.querySelector('.slider-arrow-right');
     let prevBtn = document.querySelector('.slider-arrow-left');
     let slider = document.querySelector('.slider-cont');
     let next = 4;
     let prev = 6;
-    nextBtn.addEventListener('click',function (e) {
-        let nextCard = createAnimalCard(animals[next]);
-        next = next + 1;
-        if (next > 7) next = 0;
-        slider.children[0].remove();
-        slider.append(nextCard);
+
+
+    let time = 250;
+    if (window.innerWidth >= 768 && window.innerWidth < 1280) time = 500;
+    if (window.innerWidth >= 1280) time = 750;
+
+        nextBtn.addEventListener('click',function (e) {
+        let int = setInterval(function (e) {
+            let nextCard = createAnimalCard(array[next]);
+            next = next + 1;
+            if (next > 7) next = 0;
+            slider.children[0].remove();
+            slider.append(nextCard);
+        },250);
+        setTimeout(function (e) {
+            clearInterval(int)
+        },time)
     });
     prevBtn.addEventListener('click',function (e) {
-        let prevCard = createAnimalCard(animals[prev]);
-        prev = prev - 1;
-        if (prev < 0) prev = 7;
-        slider.children[4].remove();
-        slider.prepend(prevCard);
+
+        let int = setInterval(function (e) {
+            let prevCard = createAnimalCard(array[prev]);
+            prev = prev - 1;
+            if (prev < 0) prev = 7;
+            slider.children[4].remove();
+            slider.prepend(prevCard);
+        },250);
+        setTimeout(function (e) {
+            clearInterval(int)
+        },time)
     });
 }
 function showPopup(name) {
@@ -378,6 +404,9 @@ function showPopup(name) {
         closeBtn.style.transform = 'rotate(0)'
     });
 
-    popup.classList.add('popup-active')
+    popup.classList.add('popup-active');
+
+    if (popup.classList.contains('popup-active')) document.querySelector('html').setAttribute('style','overflow:hidden');
+    else document.querySelector('html').setAttribute('style','');
 }
 
